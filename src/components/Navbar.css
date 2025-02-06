@@ -1,0 +1,110 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    left: 0;
+}
+.nav-links li a.active {
+    color: gray; /* Highlight color for active menu item */
+  }
+  
+
+/* Logo Container to Keep Background Static */
+.logo-container {
+    background-color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    height: 30px;
+    width: auto;
+}
+
+/* Typing Effect Only on Text */
+.logo {
+    font-size: 24px;
+    font-weight: normal;
+    color: rgb(248, 239, 239);
+    font-family: 'Luckiest Guy', cursive;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    text-align: center;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 45px;
+    padding: 0;
+    margin: 0;
+    padding-right: 50px;
+    transition: transform 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Links Style */
+.nav-links li a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: gray;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Mobile Menu and Hamburger Icon */
+@media (max-width: 768px) {
+    /* Full-screen menu */
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.952); /* Transparent white background */
+        width: 100%;
+        padding: 20px;
+        box-shadow: none;
+        transform: translateX(100%); /* Hidden by default */
+        justify-content: center; /* Center the menu vertically */
+        align-items: center; /* Center the menu items horizontally */
+        text-align: center; /* Ensures text alignment within the items */
+    }
+
+    /* Active state for the menu */
+    .nav-links.active {
+        transform: translateX(0);
+        padding-left: 0px;
+    }
+
+    /* Menu items */
+    .nav-links li {
+        margin: 20px 0; /* Add spacing between menu items */
+    }
+
+    /* Display the hamburger icon */
+    .menu-icon {
+        display: block;
+        padding-right: 30px;
+        font-size: 30px;
+        color: black;
+        z-index: 15; /* Ensure the menu icon is clickable */
+    }
+}
