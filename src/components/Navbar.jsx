@@ -26,6 +26,12 @@ const Navbar = () => {
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, index]);
 
+  // Handle active menu item selection
+  const handleActiveItem = (item) => {
+    setActiveItem(item); // Set the clicked item as active
+    closeMenu(); // Close the menu after selection
+  };
+
   // Toggle menu open/close
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -36,11 +42,26 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
-  // Handle active menu item selection
-  const handleActiveItem = (item) => {
-    setActiveItem(item); // Set the clicked item as active
-    closeMenu(); // Close the menu after selection
+  // Detect which section is in view and set active class
+  const handleScroll = () => {
+    const sections = ["home", "about", "projects", "contact"];
+    sections.forEach((sectionId) => {
+      const section = document.getElementById(sectionId);
+      const rect = section.getBoundingClientRect();
+      const isInView = rect.top <= window.innerHeight && rect.bottom >= 0;
+
+      if (isInView) {
+        setActiveItem(sectionId);
+      }
+    });
   };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <nav className="navbar">
