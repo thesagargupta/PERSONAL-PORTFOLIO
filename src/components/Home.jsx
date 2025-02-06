@@ -11,7 +11,7 @@ const Home = () => {
           <p className="description">I&apos;m a passionate web developer, crafting beautiful and functional websites and applications.</p>
         </div>
         <div className="image-container">
-          <img src={photo2} alt="Sagar Gupta" className="profile-image" />
+          <img src={photo3} alt="Sagar Gupta" className="profile-image" />
         </div>
       </div>
     </section>
