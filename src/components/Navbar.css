@@ -93,7 +93,9 @@
         transform: translateX(0);
         padding-left: 0px;
     }
-
+    .logo{
+        margin-top: 5px;
+    }
     /* Menu items */
     .nav-links li {
         margin: 20px 0; /* Add spacing between menu items */
