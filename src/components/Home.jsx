@@ -23,15 +23,15 @@ const Home = () => {
         <div className="intro-text">
           <h1>
             Hi, I&apos;m <span className="name">Sagar Gupta</span>
-            <span className="hand-emoji">👋</span> {/* Add hand emoji with class */}
+            <span className="hand-emoji">👋</span>{" "}
+            {/* Add hand emoji with class */}
           </h1>
           <p className="description">
-            I am a skilled Web Developer with expertise in the MERN stack,
-            specializing in building dynamic and responsive websites and web
-            applications. I have a strong foundation in programming languages
-            such as C, C++, Java, and Python, with a particular focus on Data
-            Structures and Algorithms (DSA) to solve complex problems
-            efficiently.
+            Passionate developer with a love for creating innovative solutions.
+            I specialize in web development and enjoy working with various
+            technologies to bring ideas to life. My goal is to build
+            applications that are not only functional but also user-friendly and
+            visually appealing.🤠
           </p>
 
           {/* Location and CV Button */}

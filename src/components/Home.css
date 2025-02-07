@@ -72,7 +72,9 @@
     margin-right: 8px;
     color: #000000; /* Icon color to match button */
   }
-  
+  .name {
+    white-space: nowrap; /* Ensures text stays on the same line */
+  }
   .cv-btn {
     background-color: #000000;
     color: white;
