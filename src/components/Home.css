@@ -181,7 +181,6 @@
 }
 
 .social-icons a:hover {
-  color: #0073b1; /* LinkedIn blue as default */
   transform: scale(1.2);
 }
 

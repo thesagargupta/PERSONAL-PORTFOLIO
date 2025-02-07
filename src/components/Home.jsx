@@ -3,11 +3,11 @@ import { FaSquareUpwork } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6"; // Import icons
 import "./Home.css";
 import photo5 from "../assets/photo4.jpg";
-
+import resume from "../assets/sagar resume new.pdf"
 const Home = () => {
   const handleDownloadCV = () => {
     // Replace with your CV file path
-    const cvUrl = "/path-to-your-cv.pdf";
+    const cvUrl = resume;
     const link = document.createElement("a");
     link.href = cvUrl;
     link.download = "Sagar_Gupta_CV.pdf";
@@ -42,16 +42,16 @@ const Home = () => {
 
           {/* Social Icons */}
           <div className="social-icons">
-            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/thesagargupta" target="_blank" rel="noopener noreferrer">
               <FaGithub />
             </a>
-            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer">
+            <a href="https://linkedin.com/in/sagargupta9193" target="_blank" rel="noopener noreferrer">
               <FaLinkedin />
             </a>
-            <a href="https://wa.me/yourwhatsappnumber" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/+918809197377" target="_blank" rel="noopener noreferrer">
               <FaWhatsapp />
             </a>
-            <a href="https://wa.me/yourwhatsappnumber" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.upwork.com/freelancers/~0148c554e92a965360" target="_blank" rel="noopener noreferrer">
               <FaSquareUpwork/>
             </a>
           </div>
