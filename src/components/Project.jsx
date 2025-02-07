@@ -50,7 +50,7 @@ const projects = [
       { name: "MongoDB", icon: mongo },
       { name: "Express.js", icon: express },
     ],
-    github: "",
+    github: "https://github.com/thesagargupta/portfolio",
     website: "https://sagarguptaportfolio.netlify.app/",
   },
   {
