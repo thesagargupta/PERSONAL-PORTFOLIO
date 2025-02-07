@@ -35,8 +35,8 @@ const projects = [
       { name: "CSS", icon: css },
       { name: "JavaScript", icon: js },
     ],
-    github: "https://github.com/yourproject",
-    website: "https://yourproject.com",
+    github: "https://github.com/thesagargupta/Car-Game-Js",
+    website: "https://sagarcargame.netlify.app",
   },
   {
     title: "PERSONAL PORTFOLIO",
@@ -50,8 +50,8 @@ const projects = [
       { name: "MongoDB", icon: mongo },
       { name: "Express.js", icon: express },
     ],
-    github: "https://github.com/yourproject",
-    website: "https://yourproject.com",
+    github: "",
+    website: "https://sagarguptaportfolio.netlify.app/",
   },
   {
     title: "VIRTUAL ASSISTANT",
@@ -60,8 +60,8 @@ const projects = [
     image: proj3,
     video: video3,
     technologies: [{ name: "Python", icon: python }],
-    github: "https://github.com/yourproject",
-    website: "https://yourproject.com",
+    github: "https://github.com/thesagargupta/virtual_assistant",
+    website: "https://sagarassistant.netlify.app/",
   },
   {
     title: "SHOPPING WEBSITE",
@@ -75,8 +75,8 @@ const projects = [
       { name: "MongoDB", icon: mongo },
       { name: "Express.js", icon: express },
     ],
-    github: "https://github.com/yourproject",
-    website: "https://yourproject.com",
+    github: "https://github.com/thesagargupta/Shoopers-Ecommerce",
+    website: "https://shoopers.netlify.app/",
   },
   {
     title: "MUSICOFILE",
@@ -89,8 +89,8 @@ const projects = [
       { name: "CSS", icon: css },
       { name: "JavaScript", icon: js },
     ],
-    github: "https://github.com/yourproject",
-    website: "https://yourproject.com",
+    github: "https://github.com/thesagargupta/music-player",
+    website: "https://musicofile.netlify.app",
   },
   {
     title: "CALCULATOR",
@@ -103,8 +103,8 @@ const projects = [
       { name: "CSS", icon: css },
       { name: "JavaScript", icon: js },
     ],
-    github: "https://github.com/yourproject",
-    website: "https://yourproject.com",
+    github: "https://github.com/thesagargupta/Calculator",
+    website: "https://guptajeekacalculator.netlify.app/",
   },
 ];
 
