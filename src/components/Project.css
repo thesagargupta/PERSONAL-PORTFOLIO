@@ -172,7 +172,10 @@
     gap: 8px;
     justify-content: center;
 }
-
+.website-btn:hover {
+    background: #0f8406; /* Resets to default */
+    transition: none; /* Removes animation */
+}
 .github-icon {
     font-size: 1.2rem;
 }

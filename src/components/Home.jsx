@@ -1,4 +1,5 @@
-import { FaDownload } from "react-icons/fa";
+import { FaDownload, FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
+import { FaSquareUpwork } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6"; // Import icons
 import "./Home.css";
 import photo5 from "../assets/photo4.jpg";
@@ -20,7 +21,6 @@ const Home = () => {
           <h1>
             Hi, I&apos;m <span className="name">Sagar Gupta</span>
             <span className="hand-emoji">👋</span>{" "}
-            {/* Add hand emoji with class */}
           </h1>
           <p className="description">
             Passionate developer with a love for creating innovative solutions.
@@ -30,7 +30,7 @@ const Home = () => {
             visually appealing.🤠
           </p>
 
-          {/* Location and CV Button */}
+          {/* Location, CV Button, and Social Icons */}
           <div className="extra-info">
             <div className="location">
               <FaLocationDot /> <span>New Delhi, India</span>
@@ -39,7 +39,24 @@ const Home = () => {
               <FaDownload /> Download CV
             </button>
           </div>
+
+          {/* Social Icons */}
+          <div className="social-icons">
+            <a href="https://github.com/" target="_blank" rel="noopener noreferrer">
+              <FaGithub />
+            </a>
+            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin />
+            </a>
+            <a href="https://wa.me/yourwhatsappnumber" target="_blank" rel="noopener noreferrer">
+              <FaWhatsapp />
+            </a>
+            <a href="https://wa.me/yourwhatsappnumber" target="_blank" rel="noopener noreferrer">
+              <FaSquareUpwork/>
+            </a>
+          </div>
         </div>
+
         <div className="image-container">
           <img src={photo5} alt="Sagar Gupta" className="profile-image" />
         </div>

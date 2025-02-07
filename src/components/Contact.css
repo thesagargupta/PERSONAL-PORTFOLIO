@@ -1,0 +1,111 @@
+/* Contact Section */
+.contact-section {
+    padding: 50px 20px;
+    background-color: #efefef;
+    text-align: center;
+  }
+  
+  .contact-container {
+    max-width: 90%;
+    width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Headings */
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  /* Contact Form */
+  .contact-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .contact-form {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    display: block;
+  }
+  
+  textarea {
+    resize: none;
+    height: 120px;
+  }
+  
+  /* Button */
+  .btn-submit {
+    width: 100%;
+    padding: 12px;
+    background-color: black;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .btn-submit:hover {
+    background-color: #333;
+  }
+  
+  /* Footer */
+ 
+  /* Responsive Fix */
+  @media (max-width: 600px) {
+    .contact-container {
+      width: 85%;
+      padding: 20px;
+    }
+  
+    .form-group input,
+    .form-group textarea {
+      font-size: 0.9rem;
+      padding: 10px;
+    }
+  
+    .section-title {
+      font-size: 1.5rem;
+    }
+  
+    .section-subtitle {
+      font-size: 0.9rem;
+    }
+  
+    .btn-submit {
+      font-size: 0.9rem;
+      padding: 10px;
+    }
+  }
+  
