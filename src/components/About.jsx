@@ -22,20 +22,17 @@ const education = [
     institute: "University of Rajasthan",
     degree: "Bachelor of Computer Applications (BCA)",
     year: "2022 - 2025",
-    score: "",
     image: ru, // Change to your actual image path
   },
   {
     institute: "DAV Rukmini Banarasi Kedia School, Birgunj, Nepal",
     degree: "Intermediate",
     year: "2020 - 2022",
-    score: "70 %",
     image: dav, // Change to your actual image path
   },
   {
     institute: "Chandrasheel Vidyapeeth, Kanti, Muzaffarpur, Bihar",
     degree: "Matriculation",
-    score: "79 %",
     year: "2020",
     image: tcs, // Change to your actual image path
   },

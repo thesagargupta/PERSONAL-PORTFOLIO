@@ -1,10 +1,6 @@
 import { FaDownload } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6"; // Import icons
 import "./Home.css";
-import photo1 from "../assets/photo.jpg";
-import photo2 from "../assets/photo1.jpg";
-import photo3 from "../assets/photo2.jpg";
-import photo4 from "../assets/photo3.jpg";
 import photo5 from "../assets/photo4.jpg";
 
 const Home = () => {
