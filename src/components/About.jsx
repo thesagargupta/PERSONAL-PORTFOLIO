@@ -64,12 +64,16 @@ const About = () => {
             <div className="about-content-flex">
               <img src={gifImage} alt="Developer GIF" className="about-gif" />
               <p>
-                I am a passionate Web Developer with expertise in the{" "}
-                <strong>MERN stack</strong>, creating <strong>dynamic</strong>{" "}
-                and <strong>scalable</strong> web applications. With a strong
-                grasp of <strong>Data Structures and Algorithms (DSA)</strong>,
-                I build <strong>efficient</strong> and{" "}
-                <strong>high-performance</strong> solutions.
+                I am a passionate Web and Software Developer with expertise in
+                the <strong>MERN stack</strong>, as well as software development
+                across a variety of technologies. I specialize in creating{" "}
+                <strong>dynamic</strong> and <strong>scalable</strong> web
+                applications, as well as developing efficient and robust
+                software solutions. With a strong grasp of{" "}
+                <strong>Data Structures and Algorithms (DSA)</strong>, I build{" "}
+                <strong>efficient</strong> and <strong>high-performance</strong>{" "}
+                applications, ensuring both functionality and seamless user
+                experience.
               </p>
             </div>
             <p>
