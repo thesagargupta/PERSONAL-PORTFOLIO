@@ -11,6 +11,8 @@ import image9 from "../assets/c++.png";
 import image10 from "../assets/c.png";
 import image11 from "../assets/java.png";
 import image12 from "../assets/git.png";
+import image13 from "../assets/github.png"
+import image14 from "../assets/mysql.png"
 import ru from "../assets/ru.png";
 import dav from "../assets/dav.jpg";
 import tcs from "../assets/tcs.jpg";
@@ -52,6 +54,8 @@ const skills = [
   { name: "C", image: image10 },
   { name: "Java", image: image11 },
   { name: "Git", image: image12 },
+  { name: "Github", image: image13 },
+  { name: "MySQL", image: image14 },
 ];
 
 const About = () => {
