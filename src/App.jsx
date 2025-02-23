@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <Home /> {/* Add the Home component here */}
+      <Home /> 
      <About/>
       <Projects/>
       <Contact/>
