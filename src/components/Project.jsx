@@ -124,6 +124,7 @@ const Projects = () => {
                     className="project-video"
                     muted
                     loop
+                    preload="auto"
                     playsInline
                     onMouseOver={(e) => e.target.play()}
                     onMouseOut={(e) => e.target.pause()}
