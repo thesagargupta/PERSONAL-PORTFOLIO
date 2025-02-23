@@ -120,17 +120,14 @@ const Projects = () => {
                 <img src={project.image} alt={project.title} className="project-image" />
                 {project.video && (
                   <video
-                  src={project.video}
-                  className="project-video"
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  onCanPlayThrough={(e) => e.target.setAttribute("data-ready", "true")}
-                  onMouseOver={(e) => {
-                    if (e.target.getAttribute("data-ready") === "true") e.target.play();
-                  }}
-                  onMouseOut={(e) => e.target.pause()}
+                    src={project.video}
+                    className="project-video"
+                    muted
+                    loop
+                    preload="auto"
+                    playsInline
+                    onMouseOver={(e) => e.target.play()}
+                    onMouseOut={(e) => e.target.pause()}
                   ></video>
                 )}
               </div>
