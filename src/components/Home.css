@@ -127,7 +127,7 @@
   @media (max-width: 768px) {
     .home-section {
       height: auto; /* Allow the height to be dynamic */
-      padding: 20px; /* Add padding to prevent content from touching edges */
+      padding: 40px; /* Add padding to prevent content from touching edges */
     }
   
     .home-container {
