@@ -53,8 +53,9 @@ const Contact = () => {
   };
 
   const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-    setErrors({ ...errors, [event.target.name]: "" });
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const handleSubmit = async (event) => {
@@ -62,36 +63,29 @@ const Contact = () => {
     if (!validate()) return;
     setLoading(true);
 
+    const emailParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
+      to_name: "Sagar Gupta",
+    };
+
     try {
-      // Send Data to Backend for Database Storage
-      const response = await fetch(`${backendUrl}/api/contact/submit`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const [backendResponse] = await Promise.all([
+        fetch(`${backendUrl}/api/contact/submit`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+          keepalive: true,
+        }),
+        emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey),
+      ]);
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to save message.");
-      }
-
-      // Send Email Using EmailJS
-      const emailParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        phone: formData.phone,
-        message: formData.message,
-        to_name: "Sagar Gupta", // Change this to your name or recipient name
-      };
-
-      await emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey);
+      const backendResult = await backendResponse.json();
+      if (!backendResponse.ok) throw new Error(backendResult.message || "Failed to save message.");
 
       toast.success("Message sent successfully!");
-
-      // Reset Form
       setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
       toast.error(error.message || "Something went wrong.");
