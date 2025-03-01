@@ -61,7 +61,9 @@ const Contact = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!validate()) return;
+    
     setLoading(true);
+    toast.loading("Sending message...");
 
     const emailParams = {
       from_name: formData.name,
@@ -85,9 +87,11 @@ const Contact = () => {
       const backendResult = await backendResponse.json();
       if (!backendResponse.ok) throw new Error(backendResult.message || "Failed to save message.");
 
+      toast.dismiss();
       toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
+      toast.dismiss();
       toast.error(error.message || "Something went wrong.");
     } finally {
       setLoading(false);
