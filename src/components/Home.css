@@ -190,6 +190,9 @@
     transform: none;
     color: inherit;
   }
+  .cv-btn:hover {
+    background-color: unset; /* or transparent or initial, depending on your needs */
+  }
   .social-icons{
     justify-content: center;
   }
