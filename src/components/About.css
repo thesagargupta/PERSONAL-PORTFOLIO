@@ -107,6 +107,10 @@
     .skill-card {
       width: 100px;
     }
+
+    .skill-card:hover {
+    transform: none;
+  }
   
     .skill-icon {
       width: 50px;
