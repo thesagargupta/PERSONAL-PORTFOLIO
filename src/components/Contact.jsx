@@ -58,45 +58,68 @@ const Contact = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!validate()) return;
-    
-    setLoading(true);
-    toast.loading("Sending message...");
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  if (!validate()) return;
 
-    const emailParams = {
-      from_name: formData.name,
-      from_email: formData.email,
-      phone: formData.phone,
-      message: formData.message,
-      to_name: "Sagar Gupta",
-    };
+  setLoading(true);
+  toast.loading("Sending message...");
 
-    try {
-      const [backendResponse] = await Promise.all([
-        fetch(`${backendUrl}/api/contact/submit`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-          keepalive: true,
-        }),
-        emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey),
-      ]);
-
-      const backendResult = await backendResponse.json();
-      if (!backendResponse.ok) throw new Error(backendResult.message || "Failed to save message.");
-
-      toast.dismiss();
-      toast.success("Message sent successfully!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-    } catch (error) {
-      toast.dismiss();
-      toast.error(error.message || "Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
+  const emailParams = {
+    from_name: formData.name,
+    from_email: formData.email,
+    phone: formData.phone,
+    message: formData.message,
+    to_name: "Sagar Gupta",
   };
+
+  const ultraMsgInstanceId = "instance125170"; // ✅ Your instance
+  const ultraMsgToken = "ma0o26j89691oljd";     // ✅ Your token
+  const ultraMsgPhone = "+918809197377";        // ✅ Your WhatsApp number with country code
+
+  // ✅ Correct UltraMsg URL with token in query param
+  const ultraMsgUrl = `https://api.ultramsg.com/${ultraMsgInstanceId}/messages/chat?token=${ultraMsgToken}`;
+
+  const whatsappBody = {
+    to: ultraMsgPhone,
+    body: `🚀 New Portfolio Website Message\n\n👤 Name: ${formData.name}\n📧 Email: ${formData.email}\n📞 Phone: ${formData.phone}\n📝 Message: ${formData.message}`,
+  };
+
+  try {
+    const [backendResponse, _emailRes, whatsappRes] = await Promise.all([
+      fetch(`${backendUrl}/api/contact/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+        keepalive: true,
+      }),
+      emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey),
+      fetch(ultraMsgUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(whatsappBody),
+      }),
+    ]);
+
+    const backendResult = await backendResponse.json();
+    if (!backendResponse.ok) throw new Error(backendResult.message || "Failed to save message.");
+
+    // ✅ Optional: check WhatsApp response
+    const whatsappJson = await whatsappRes.json();
+    if (whatsappJson.error) throw new Error("WhatsApp message failed.");
+
+    toast.dismiss();
+    toast.success("Thanks For Contacting");
+    setFormData({ name: "", email: "", phone: "", message: "" });
+  } catch (error) {
+    toast.dismiss();
+    toast.error(error.message || "Something went wrong.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <section id="contact" className="contact-section">
