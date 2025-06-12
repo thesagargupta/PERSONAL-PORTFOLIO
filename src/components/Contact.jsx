@@ -14,13 +14,11 @@ const Contact = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  // Environment Variables
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  // ✅ Environment Variables
   const emailServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const emailTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
   const emailPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-  // Validate Form
   const validate = () => {
     let newErrors = {};
 
@@ -58,68 +56,54 @@ const Contact = () => {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  if (!validate()) return;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validate()) return;
 
-  setLoading(true);
-  toast.loading("Sending message...");
+    setLoading(true);
+    toast.loading("Sending message...");
 
-  const emailParams = {
-    from_name: formData.name,
-    from_email: formData.email,
-    phone: formData.phone,
-    message: formData.message,
-    to_name: "Sagar Gupta",
+    const emailParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      phone: formData.phone,
+      message: formData.message,
+      to_name: "Sagar Gupta",
+    };
+
+    const ultraMsgInstanceId = "instance125170";
+    const ultraMsgToken = "ma0o26j89691oljd";
+    const ultraMsgPhone = "+918809197377";
+    const ultraMsgUrl = `https://api.ultramsg.com/${ultraMsgInstanceId}/messages/chat?token=${ultraMsgToken}`;
+
+    const whatsappBody = {
+      to: ultraMsgPhone,
+      body: `🚀 New Portfolio Message\n\n👤 Name: ${formData.name}\n📧 Email: ${formData.email}\n📞 Phone: ${formData.phone}\n📝 Message: ${formData.message}`,
+    };
+
+    try {
+      const [_emailRes, whatsappRes] = await Promise.all([
+        emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey),
+        fetch(ultraMsgUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(whatsappBody),
+        }),
+      ]);
+
+      const whatsappJson = await whatsappRes.json();
+      if (whatsappJson.error) throw new Error("WhatsApp message failed.");
+
+      toast.dismiss();
+      toast.success("Thanks for contacting!");
+      setFormData({ name: "", email: "", phone: "", message: "" });
+    } catch (error) {
+      toast.dismiss();
+      toast.error(error.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const ultraMsgInstanceId = "instance125170"; // ✅ Your instance
-  const ultraMsgToken = "ma0o26j89691oljd";     // ✅ Your token
-  const ultraMsgPhone = "+918809197377";        // ✅ Your WhatsApp number with country code
-
-  // ✅ Correct UltraMsg URL with token in query param
-  const ultraMsgUrl = `https://api.ultramsg.com/${ultraMsgInstanceId}/messages/chat?token=${ultraMsgToken}`;
-
-  const whatsappBody = {
-    to: ultraMsgPhone,
-    body: `🚀 New Portfolio Website Message\n\n👤 Name: ${formData.name}\n📧 Email: ${formData.email}\n📞 Phone: ${formData.phone}\n📝 Message: ${formData.message}`,
-  };
-
-  try {
-    const [backendResponse, _emailRes, whatsappRes] = await Promise.all([
-      fetch(`${backendUrl}/api/contact/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-        keepalive: true,
-      }),
-      emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey),
-      fetch(ultraMsgUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(whatsappBody),
-      }),
-    ]);
-
-    const backendResult = await backendResponse.json();
-    if (!backendResponse.ok) throw new Error(backendResult.message || "Failed to save message.");
-
-    // ✅ Optional: check WhatsApp response
-    const whatsappJson = await whatsappRes.json();
-    if (whatsappJson.error) throw new Error("WhatsApp message failed.");
-
-    toast.dismiss();
-    toast.success("Thanks For Contacting");
-    setFormData({ name: "", email: "", phone: "", message: "" });
-  } catch (error) {
-    toast.dismiss();
-    toast.error(error.message || "Something went wrong.");
-  } finally {
-    setLoading(false);
-  }
-};
 
   return (
     <section id="contact" className="contact-section">
