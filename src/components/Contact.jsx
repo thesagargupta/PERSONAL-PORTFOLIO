@@ -82,25 +82,26 @@ const Contact = () => {
     };
 
     try {
-      const [_emailRes, whatsappRes] = await Promise.all([
-        emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey),
-        fetch(ultraMsgUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(whatsappBody),
-        }),
-      ]);
+      // Send email first and dismiss toast as soon as it's sent
+      await emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey);
 
-      const whatsappJson = await whatsappRes.json();
-      if (whatsappJson.error) throw new Error("WhatsApp message failed.");
-
+      // Optimistically dismiss and reset UI
       toast.dismiss();
       toast.success("Thanks for contacting!");
       setFormData({ name: "", email: "", phone: "", message: "" });
+      setLoading(false);
+
+      // Now send WhatsApp in background
+      fetch(ultraMsgUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(whatsappBody),
+      }).catch(() => {
+        toast.error("WhatsApp delivery failed (optional)");
+      });
     } catch (error) {
       toast.dismiss();
       toast.error(error.message || "Something went wrong.");
-    } finally {
       setLoading(false);
     }
   };
