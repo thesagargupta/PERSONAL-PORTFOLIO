@@ -81,27 +81,53 @@ const Contact = () => {
       body: `🚀 New Portfolio Message\n\n👤 Name: ${formData.name}\n📧 Email: ${formData.email}\n📞 Phone: ${formData.phone}\n📝 Message: ${formData.message}`,
     };
 
+    let emailSuccess = false;
+    let whatsappSuccess = false;
+
     try {
-      // Send email first and dismiss toast as soon as it's sent
-      await emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey);
+      const emailPromise = emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey)
+        .then((res) => {
+          console.log("Email sent successfully:", res.status);
+          emailSuccess = true;
+        })
+        .catch((err) => {
+          console.error("EmailJS error:", err);
+        });
 
-      // Optimistically dismiss and reset UI
-      toast.dismiss();
-      toast.success("Thanks for contacting!");
-      setFormData({ name: "", email: "", phone: "", message: "" });
-      setLoading(false);
-
-      // Now send WhatsApp in background
-      fetch(ultraMsgUrl, {
+      const whatsappPromise = fetch(ultraMsgUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(whatsappBody),
-      }).catch(() => {
-        toast.error("WhatsApp delivery failed (optional)");
-      });
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          if (!json.error) {
+            console.log("WhatsApp sent:", json);
+            whatsappSuccess = true;
+          } else {
+            console.error("WhatsApp error:", json);
+          }
+        })
+        .catch((err) => {
+          console.error("WhatsApp fetch error:", err);
+        });
+
+      await Promise.all([emailPromise, whatsappPromise]);
+
+      toast.dismiss();
+
+      if (emailSuccess || whatsappSuccess) {
+        toast.success("Thanks for contacting!");
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        throw new Error("Both email and WhatsApp failed.");
+      }
+
     } catch (error) {
+      console.error("Final error:", error);
       toast.dismiss();
       toast.error(error.message || "Something went wrong.");
+    } finally {
       setLoading(false);
     }
   };
