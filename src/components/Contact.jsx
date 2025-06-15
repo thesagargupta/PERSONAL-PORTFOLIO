@@ -72,7 +72,7 @@ const Contact = () => {
     };
 
     const ultraMsgInstanceId = "instance125170";
-    const ultraMsgToken = "ma0o26j89691oljd";
+    const ultraMsgToken = "ma0o26j89691oljd6ggg";
     const ultraMsgPhone = "+918809197377";
     const ultraMsgUrl = `https://api.ultramsg.com/${ultraMsgInstanceId}/messages/chat?token=${ultraMsgToken}`;
 
