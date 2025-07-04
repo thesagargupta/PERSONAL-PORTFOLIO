@@ -4,20 +4,21 @@ import image2 from "../assets/pngwing.com (2).png";
 import image3 from "../assets/node.png";
 import image4 from "../assets/mongodb.jpg";
 import image5 from "../assets/express.png";
-import image6 from "../assets/html.png";
+// import image6 from "../assets/html.png";
 import image7 from "../assets/css.png";
 import image8 from "../assets/python.png";
 import image9 from "../assets/c++.png";
 import image10 from "../assets/c.png";
 import image11 from "../assets/java.png";
 import image12 from "../assets/git.png";
-import image13 from "../assets/github.png"
-import image14 from "../assets/mysql.png"
+import image13 from "../assets/github.png";
+// import image14 from "../assets/mysql.png";
 import ru from "../assets/ru.png";
 import dav from "../assets/dav.jpg";
 import tcs from "../assets/tcs.jpg";
 import gifImage from "../assets/gif.gif"; // Update with your actual path
-
+import typescriptImg from "../assets/TypeScript.png";
+import nextjsImg from "../assets/Next.js.png";
 // Education Data
 const education = [
   {
@@ -47,7 +48,7 @@ const skills = [
   { name: "Node.js", image: image3 },
   { name: "MongoDB", image: image4 },
   { name: "Express.js", image: image5 },
-  { name: "HTML5", image: image6 },
+  // { name: "HTML5", image: image6 },
   { name: "CSS3", image: image7 },
   { name: "Python", image: image8 },
   { name: "C++", image: image9 },
@@ -55,7 +56,9 @@ const skills = [
   { name: "Java", image: image11 },
   { name: "Git", image: image12 },
   { name: "Github", image: image13 },
-  { name: "MySQL", image: image14 },
+  // { name: "MySQL", image: image14 },
+  { name: "Next.js", image: nextjsImg },
+  { name: "TypeScript", image: typescriptImg },
 ];
 
 const About = () => {
