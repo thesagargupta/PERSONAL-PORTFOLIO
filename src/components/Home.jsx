@@ -2,7 +2,7 @@ import { FaDownload, FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import { FaSquareUpwork } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6"; // Import icons
 import "./Home.css";
-import photo5 from "../assets/photo8.jpg";
+import photo5 from "../assets/photo8.webp";
 import resume from "../assets/sagar resume new.pdf";
 const Home = () => {
   const handleDownloadCV = () => {
