@@ -19,6 +19,11 @@ import tcs from "../assets/tcs.jpg";
 import gifImage from "../assets/gif.gif"; // Update with your actual path
 import typescriptImg from "../assets/TypeScript.png";
 import nextjsImg from "../assets/Next.js.png";
+import { useState, useEffect } from "react";
+import KuruviofferPDF from "../assets/Sagar intern OL.pdf";
+import kartofferletter from "../assets/kartbuddy Intern offer letter Sagar Gupta.pdf";
+import work1 from "../assets/kartbuddy.jpeg";
+import work2 from "../assets/kuruvi.jpeg";
 // Education Data
 const education = [
   {
@@ -38,6 +43,34 @@ const education = [
     degree: "Matriculation",
     year: "2020",
     image: tcs, // Change to your actual image path
+  },
+];
+
+// Experience Data
+const experiences = [
+  {
+    company: "kartBuddy",
+    role: "MERN Stack Developer Intern",
+    period: "Jun 2025 - Aug 2025",
+    image: work1,
+  offerLetter: kartofferletter,
+    bullets: [
+      "Built and shipped front-end features using React and modern CSS.",
+      "Implemented RESTful APIs with Node.js and Express for product modules.",
+      "Improved performance by optimizing database queries and reducing bundle size.",
+    ],
+  },
+  {
+    company: "Kuruvi Q Commerce Private Limited",
+    role: "Software Developer Intern",
+    period: "Jul 2025 - Dec 2025",
+    image: work2,
+    offerLetter: KuruviofferPDF,
+    bullets: [
+      "Created responsive, accessible UI components following design specs.",
+      "Collaborated with designers to iterate on interaction patterns.",
+      "Added unit tests and documentation for reusable components.",
+    ],
   },
 ];
 
@@ -62,6 +95,114 @@ const skills = [
 ];
 
 const About = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [prefetched, setPrefetched] = useState({});
+  const [modalOriginalSrc, setModalOriginalSrc] = useState(null);
+
+  const openModal = (src) => {
+  // use prefetched blob URL when available
+  const srcToUse = prefetched[src] || src;
+  setModalOriginalSrc(src);
+  setModalContent(srcToUse);
+  setModalOpen(true);
+  // if already prefetched, we can hide the loader immediately
+  if (prefetched[src]) {
+    // small delay to allow rendering kickoff
+    setTimeout(() => setModalLoading(false), 100);
+  } else {
+    setModalLoading(true);
+  }
+  };
+
+  // fallback: if loading remains for too long, clear spinner to avoid stuck state
+  useEffect(() => {
+    let t;
+    if (modalOpen && modalLoading) {
+      t = setTimeout(() => {
+        setModalLoading(false);
+      }, 15000); // 15s fallback
+    }
+    return () => clearTimeout(t);
+  }, [modalOpen, modalLoading]);
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setModalContent(null);
+  setModalLoading(false);
+  };
+
+  // Prevent background scrolling when modal is open; restore on close
+  useEffect(() => {
+    if (modalOpen) {
+      // save current overflow to restore later
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev || "";
+      };
+    }
+    return;
+  }, [modalOpen]);
+
+  // Prefetch offer-letter PDFs to improve load speed
+  useEffect(() => {
+    let active = true;
+    const urls = experiences
+      .map((e) => e.offerLetter)
+      .filter(Boolean)
+      .filter((u) => typeof u === "string" && u.toLowerCase().endsWith(".pdf"));
+
+    const map = {};
+
+    const fetchAll = async () => {
+      await Promise.all(
+        urls.map(async (url) => {
+          try {
+            const res = await fetch(url, { cache: "force-cache" });
+            if (!res.ok) return;
+            const blob = await res.blob();
+            const objectUrl = URL.createObjectURL(blob);
+            map[url] = objectUrl;
+          } catch (err) {
+            // log prefetch errors for troubleshooting; best-effort
+            console.warn("Offer prefetch failed:", err, url);
+          }
+        })
+      );
+      if (active) setPrefetched((p) => ({ ...p, ...map }));
+    };
+
+    if (urls.length) fetchAll();
+
+    return () => {
+      active = false;
+      // revoke created object URLs
+      Object.values(map).forEach((u) => {
+        if (u) {
+          try {
+            URL.revokeObjectURL(u);
+          } catch (err) {
+            console.warn("Failed to revoke object URL", err);
+          }
+        }
+      });
+    };
+  }, []);
+
+  // cleanup prefetched object URLs on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(prefetched).forEach((u) => {
+        try {
+          URL.revokeObjectURL(u);
+        } catch (err) {
+          console.warn("Failed to revoke prefetched object URL", err);
+        }
+      });
+    };
+  }, [prefetched]);
   return (
     <section id="about" className="about-section">
       <div className="about-container">
@@ -134,6 +275,73 @@ const About = () => {
               ))}
             </div>
           </div>
+          <hr className="section-divider" />
+
+          {/* Experience Section */}
+          <div className="experience-section">
+            <h3 className="experience-title">Experience</h3>
+            <div className="experience-container">
+              {experiences.map((exp, idx) => (
+                <div key={idx} className="experience-item">
+                  <div className="experience-logo">
+                    <img src={exp.image} alt={exp.company} />
+                  </div>
+                  <div className="experience-details">
+                    <h4>{exp.role}</h4>
+                    <p className="experience-company">{exp.company}</p>
+                    <ul className="experience-desc">
+                      {exp.bullets.map((b, i) => (
+                        <li key={i}>{b}</li>
+                      ))}
+                    </ul>
+                    {exp.offerLetter && (
+                      <div className="offer-actions">
+                        <button
+                          className="offer-btn"
+                          onClick={() => openModal(exp.offerLetter)}
+                        >
+                          View Offer Letter
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <div className="experience-period">
+                    <span>{exp.period}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Modal for offer letters */}
+          {modalOpen && (
+            <div className="modal-overlay" onClick={closeModal}>
+                <div className="modal-body" onClick={(e) => e.stopPropagation()}>
+                  <div className="modal-scroll">
+                              {modalLoading && (
+                                <div className="modal-spinner" aria-hidden>
+                                  <div className="spinner" />
+                                </div>
+                              )}
+                              {modalContent && modalOriginalSrc && typeof modalOriginalSrc === "string" && modalOriginalSrc.toLowerCase().endsWith(".pdf") ? (
+                                <iframe
+                                  src={modalContent}
+                                  title="Offer Letter"
+                                  className="modal-iframe"
+                                  onLoad={() => setModalLoading(false)}
+                                />
+                              ) : (
+                                <img
+                                  src={modalContent}
+                                  alt="Offer Letter"
+                                  className="modal-image"
+                                  onLoad={() => setModalLoading(false)}
+                                />
+                              )}
+                  </div>
+                  <button className="modal-close" onClick={closeModal} aria-label="Close">Close</button>
+                </div>
+            </div>
+          )}
         </div>
       </div>
     </section>
