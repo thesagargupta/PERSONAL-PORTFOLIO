@@ -104,6 +104,18 @@ const About = () => {
   const openModal = (src) => {
   // use prefetched blob URL when available
   const srcToUse = prefetched[src] || src;
+  // If the original resource is a PDF and we're on a small/mobile screen, open in a new tab
+  try {
+    const isPdf = typeof src === "string" && src.toLowerCase().endsWith(".pdf");
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+    if (isPdf && isMobile) {
+      // prefer original src (not blob) for opening in new tab so browser handles it
+      window.open(src, "_blank", "noopener,noreferrer");
+      return;
+    }
+  } catch {
+    // ignore and continue to modal
+  }
   setModalOriginalSrc(src);
   setModalContent(srcToUse);
   setModalOpen(true);
