@@ -21,7 +21,7 @@ import typescriptImg from "../assets/TypeScript.png";
 import nextjsImg from "../assets/Next.js.png";
 import { useState, useEffect } from "react";
 import KuruviofferPDF from "../assets/Sagar intern OL.pdf";
-import kartofferletter from "../assets/kartbuddy Intern offer letter Sagar Gupta.pdf";
+import kartofferletter from "../assets/sagar experiene letter.pdf";
 import work1 from "../assets/kartbuddy.jpeg";
 import work2 from "../assets/kuruvi.jpeg";
 // Education Data
@@ -53,25 +53,13 @@ const experiences = [
     role: "MERN Stack Developer Intern",
     period: "Jun 2025 - Aug 2025",
     image: work1,
-  offerLetter: kartofferletter,
+    offerLetter: kartofferletter,
     bullets: [
       "Built and shipped front-end features using React and modern CSS.",
       "Implemented RESTful APIs with Node.js and Express for product modules.",
       "Improved performance by optimizing database queries and reducing bundle size.",
     ],
-  },
-  {
-    company: "Kuruvi Q Commerce Private Limited",
-    role: "Software Developer Intern",
-    period: "Jul 2025 - Dec 2025",
-    image: work2,
-    offerLetter: KuruviofferPDF,
-    bullets: [
-      "Created responsive, accessible UI components following design specs.",
-      "Collaborated with designers to iterate on interaction patterns.",
-      "Added unit tests and documentation for reusable components.",
-    ],
-  },
+  },  
 ];
 
 // Skills Data
@@ -312,7 +300,7 @@ const About = () => {
                           className="offer-btn"
                           onClick={() => openModal(exp.offerLetter)}
                         >
-                          View Offer Letter
+                          View Certificate
                         </button>
                       </div>
                     )}
