@@ -20,10 +20,8 @@ import gifImage from "../assets/gif.gif"; // Update with your actual path
 import typescriptImg from "../assets/TypeScript.png";
 import nextjsImg from "../assets/Next.js.png";
 import { useState, useEffect } from "react";
-import KuruviofferPDF from "../assets/Sagar intern OL.pdf";
 import kartofferletter from "../assets/sagar experiene letter.pdf";
 import work1 from "../assets/kartbuddy.jpeg";
-import work2 from "../assets/kuruvi.jpeg";
 // Education Data
 const education = [
   {

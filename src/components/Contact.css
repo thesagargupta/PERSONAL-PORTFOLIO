@@ -108,4 +108,84 @@
       padding: 10px;
     }
   }
+
+/* Slider send styles */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0; padding: 0; margin: -1px;
+}
+.slider-send { width: 100%; margin-top: 12px; }
+.slider-send .slider-track {
+  position: relative;
+  height: 44px; /* taller for spherical handle */
+  border-radius: 999px;
+  overflow: hidden;
+  background: #000000; /* dark track (black) */
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.18);
+}
+.slider-send .slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: linear-gradient(90deg,#ff7a00 0%, #ff8f3d 100%); /* orange accent */
+  opacity: 0.98;
+  transition: width 160ms linear, background-color 220ms ease;
+}
+.slider-send .slider-label {
+  flex: 1;
+  text-align: center;
+  color: #fff; /* white label on dark track */
+  font-weight: 800;
+  z-index: 5;
+  font-size: 0.95rem;
+}
+.slider-send .slider-handle {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  width: 44px;
+  height: 44px;
+  background: #ffffff; /* spherical dark handle */
+  border-radius: 999px;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.28);
+  cursor: grab;
+  transition: transform 160ms cubic-bezier(.2,.8,.2,1), box-shadow 120ms;
+  will-change: transform;
+  touch-action: none;
+  transform: translateX(0px);
+}
+.slider-send .slider-handle:active{ cursor:grabbing }
+.slider-send.disabled { opacity: 0.75; pointer-events: none; }
+
+/* Completed state: subtly shrink track height and center status */
+.slider-send.completed .slider-track { height: 36px; }
+.slider-send.completed .slider-label { color: #fff; }
+
+@media (max-width:600px){
+  .slider-send .slider-track{ height: 40px; padding: 6px }
+  .slider-send .slider-handle{ width: 40px; height: 40px; top:6px; left:6px }
+  .slider-send .slider-label{ font-size:0.92rem }
+}
+
+/* Spinner inside handle */
+.handle-spinner {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  border-top-color: #ffb38f; /* light orange */
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
   

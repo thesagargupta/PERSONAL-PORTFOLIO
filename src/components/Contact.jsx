@@ -1,7 +1,247 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import emailjs from "emailjs-com";
 import "./Contact.css";
+
+// Pointer-capture slider for smooth, framer-motion-like dragging
+/* eslint-disable react/prop-types */
+const SliderSend = ({ loading, onComplete }) => {
+  const trackRef = useRef(null);
+  const handleRef = useRef(null);
+  const fillRef = useRef(null);
+  const draggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const startTranslateRef = useRef(0);
+  const maxLeftRef = useRef(0);
+  const [completed, setCompleted] = useState(false);
+  const [waiting, setWaiting] = useState(false);
+
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  const computeMax = () => {
+    const track = trackRef.current;
+    const handle = handleRef.current;
+    if (!track || !handle) return 0;
+    const tr = track.getBoundingClientRect();
+    return Math.max(0, tr.width - handle.offsetWidth - 12);
+  };
+
+  const parseTranslate = (el) => {
+    if (!el) return 0;
+    const tr = el.style.transform || '';
+    const m = tr.match(/translateX\((-?\d+(?:\.\d+)?)px\)/);
+    return m ? Number(m[1]) : 0;
+  };
+
+  const setPos = useCallback((x) => {
+    const handle = handleRef.current;
+    const fill = fillRef.current;
+    if (!handle || !fill) return;
+    handle.style.transform = `translateX(${x}px)`;
+    const pct = maxLeftRef.current ? (x / maxLeftRef.current) * 100 : 0;
+    fill.style.width = `${clamp(pct, 0, 100)}%`;
+  }, []);
+
+  const resetHandleAnimated = (delay = 700) => {
+    const handle = handleRef.current;
+    const fill = fillRef.current;
+    if (!handle || !fill) return;
+    setTimeout(() => {
+      handle.style.transition = 'transform 260ms cubic-bezier(.2,.9,.2,1)';
+      fill.style.transition = 'width 260ms cubic-bezier(.2,.9,.2,1)';
+      handle.style.transform = 'translateX(0px)';
+      fill.style.width = '0%';
+      setTimeout(() => {
+        try {
+          handle.style.transition = '';
+          fill.style.transition = '';
+        } catch (err) { console.warn(err); }
+        setCompleted(false);
+      }, 280);
+    }, delay);
+  };
+
+  // raf helpers for smooth updates
+  const latestXRef = useRef(null);
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (!draggingRef.current) return;
+      const clientX = e.clientX ?? (e.touches && e.touches[0] && e.touches[0].clientX);
+      if (clientX == null) return;
+      latestXRef.current = clientX;
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+        if (!draggingRef.current) return;
+        const dx = latestXRef.current - startXRef.current;
+        const proposed = clamp(startTranslateRef.current + dx, 0, maxLeftRef.current);
+        setPos(proposed);
+      });
+    };
+
+    const onUp = async (e) => {
+      if (!draggingRef.current) return;
+      draggingRef.current = false;
+      const handle = handleRef.current;
+      const fill = fillRef.current;
+      if (!handle || !fill) return;
+      try { handle.releasePointerCapture && handle.releasePointerCapture(e.pointerId); } catch (err) { console.warn(err); }
+      handle.classList.remove('dragging');
+      const cur = parseTranslate(handle);
+      const pct = maxLeftRef.current ? cur / maxLeftRef.current : 0;
+      if (pct >= 0.9) {
+        // animate to end
+        handle.style.transition = 'transform 240ms cubic-bezier(.2,.9,.2,1)';
+        fill.style.transition = 'width 240ms cubic-bezier(.2,.9,.2,1)';
+        handle.style.transform = `translateX(${maxLeftRef.current}px)`;
+        fill.style.width = '100%';
+        // wait for transition
+        setWaiting(true);
+        const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+        await wait(260);
+        // call parent
+        let ok = false;
+        try {
+          if (onComplete) ok = await onComplete();
+        } catch (err) {
+          console.warn(err);
+          ok = false;
+        }
+        setWaiting(false);
+        if (ok) {
+          setCompleted(true);
+          // show success briefly then reset to original state
+          resetHandleAnimated(900);
+        } else {
+          // error pulse then reset
+          fill.style.background = 'rgba(255,80,80,0.12)';
+          setTimeout(() => {
+            fill.style.background = '';
+            handle.style.transition = 'transform 240ms cubic-bezier(.2,.9,.2,1)';
+            fill.style.transition = 'width 240ms cubic-bezier(.2,.9,.2,1)';
+            handle.style.transform = 'translateX(0px)';
+            fill.style.width = '0%';
+            setTimeout(() => {
+              handle.style.transition = '';
+              fill.style.transition = '';
+            }, 260);
+          }, 800);
+        }
+      } else {
+        // snap back
+        handle.style.transition = 'transform 240ms cubic-bezier(.2,.9,.2,1)';
+        fill.style.transition = 'width 240ms cubic-bezier(.2,.9,.2,1)';
+        handle.style.transform = 'translateX(0px)';
+        fill.style.width = '0%';
+        setTimeout(() => {
+          if (handle) handle.style.transition = '';
+          if (fill) fill.style.transition = '';
+        }, 260);
+      }
+    };
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onUp);
+
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onUp);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [onComplete, setPos]);
+
+  const onDown = (e) => {
+    if (loading || completed || waiting) return;
+    const handle = handleRef.current;
+    const track = trackRef.current;
+    if (!handle || !track) return;
+    // compute max
+    maxLeftRef.current = computeMax();
+    // start positions
+    startXRef.current = e.clientX;
+    startTranslateRef.current = parseTranslate(handle);
+    draggingRef.current = true;
+    handle.setPointerCapture && handle.setPointerCapture(e.pointerId);
+    handle.classList.add('dragging');
+    // clear transitions
+    handle.style.transition = '';
+    if (fillRef.current) fillRef.current.style.transition = '';
+  };
+
+  return (
+    <div className={`slider-send ${loading ? 'disabled' : ''} ${completed ? 'completed' : ''}`}>
+      <div className="slider-track" ref={trackRef} aria-hidden>
+        <div className="slider-fill" ref={fillRef} />
+        <div className="slider-label">
+          {waiting ? 'Sending...' : completed ? 'Sent' : 'Slide to Send'}
+        </div>
+        <div
+          className="slider-handle"
+          ref={handleRef}
+          role="button"
+          tabIndex={0}
+          aria-label="Slide to send message"
+          onPointerDown={onDown}
+          onTouchStart={(ev) => onDown(ev.touches ? ev.touches[0] : ev)}
+          onKeyDown={async (e) => {
+            if (loading || waiting) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setWaiting(true);
+              let ok = false;
+              try {
+                if (onComplete) ok = await onComplete();
+              } catch (err) { console.warn(err); }
+              setWaiting(false);
+              if (ok) setCompleted(true);
+            }
+            if (e.key === 'ArrowRight') {
+              const handle = handleRef.current;
+              const track = trackRef.current;
+              const fill = fillRef.current;
+              if (!handle || !track || !fill) return;
+              const maxLeft = computeMax();
+              const cur = parseTranslate(handle);
+              const next = clamp(cur + 36, 0, maxLeft);
+              handle.style.transform = `translateX(${next}px)`;
+              fill.style.width = `${(next / maxLeft) * 100}%`;
+              if (next >= maxLeft * 0.9) {
+                // same complete flow
+                setWaiting(true);
+                let ok = false;
+                try { if (onComplete) ok = await onComplete(); } catch (err) { console.warn(err); }
+                setWaiting(false);
+                if (ok) {
+                  setCompleted(true);
+                  resetHandleAnimated(700);
+                }
+              }
+            }
+          }}
+        >
+          {/* spherical handle content: spinner when waiting, otherwise send icon */}
+          {waiting ? (
+            <div className="handle-spinner" aria-hidden />
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+              <path d="M22 2L11 13" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#fff" strokeWidth="0" fill="#ff7a00" opacity="1" />
+            </svg>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -57,11 +297,11 @@ const Contact = () => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!validate()) return;
+  if (event && event.preventDefault) event.preventDefault();
+  if (!validate()) return false;
 
-    setLoading(true);
-    toast.loading("Sending message...");
+  setLoading(true);
+  const toastId = toast.loading("Sending message...");
 
     const emailParams = {
       from_name: formData.name,
@@ -81,10 +321,11 @@ const Contact = () => {
       body: `🚀 New Portfolio Message\n\n👤 Name: ${formData.name}\n📧 Email: ${formData.email}\n📞 Phone: ${formData.phone}\n📝 Message: ${formData.message}`,
     };
 
-    let emailSuccess = false;
-    let whatsappSuccess = false;
+  let emailSuccess = false;
+  let whatsappSuccess = false;
+  let result = false;
 
-    try {
+  try {
       const emailPromise = emailjs.send(emailServiceId, emailTemplateId, emailParams, emailPublicKey)
         .then((res) => {
           console.log("Email sent successfully:", res.status);
@@ -114,22 +355,27 @@ const Contact = () => {
 
       await Promise.all([emailPromise, whatsappPromise]);
 
-      toast.dismiss();
+      toast.dismiss(toastId);
 
       if (emailSuccess || whatsappSuccess) {
         toast.success("Thanks for contacting!");
         setFormData({ name: "", email: "", phone: "", message: "" });
+        result = true;
       } else {
-        throw new Error("Both email and WhatsApp failed.");
+        result = false;
+        toast.error("Both email and WhatsApp failed.");
       }
 
     } catch (error) {
       console.error("Final error:", error);
-      toast.dismiss();
+      toast.dismiss(toastId);
       toast.error(error.message || "Something went wrong.");
+      result = false;
     } finally {
       setLoading(false);
     }
+
+    return result;
   };
 
   return (
@@ -185,9 +431,8 @@ const Contact = () => {
               ></textarea>
               {errors.message && <p className="error-message">{errors.message}</p>}
             </div>
-            <button type="submit" className="btn-submit" disabled={loading}>
-              {loading ? "Sending..." : "Send Message"}
-            </button>
+              {/* Slider send replaces the submit button but still triggers handleSubmit */}
+              <SliderSend loading={loading} onComplete={handleSubmit} />
           </form>
         </div>
       </div>
