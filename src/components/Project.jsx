@@ -117,7 +117,7 @@ const projects = [
     technologies: [
       { name: "Next.js", icon: nextjs },
     ],
-    github: "https://github.com/thesagargupta/BharatAI",
+    github: "https://github.com/thesagargupta/Bharat-Ai",
     website: "https://thebharatai.vercel.app",
   },
 ];
