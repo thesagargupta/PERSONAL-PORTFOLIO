@@ -1,18 +1,20 @@
 import "./Project.css";
 import { FaGithub } from "react-icons/fa";
 import { BsGlobe } from "react-icons/bs";
+import nextjs from "../assets/Next.js.png";
 import proj1 from "../assets/cargame.png";
 import proj2 from "../assets/portfolio.jpg";
 import proj3 from "../assets/virtual.jpg";
 import proj4 from "../assets/shoopers.png";
 import proj5 from "../assets/musicofile.png";
-import proj6 from "../assets/calculator.png";
+import BharatAiLogo from "../assets/BharatAIlogo.png"
+// import proj6 from "../assets/calculator.png";
 import video1 from "../assets/record1.webm";
 import video2 from "../assets/record2.webm";
 import video3 from "../assets/record3.webm";
 import video4 from "../assets/record4.webm";
 import video5 from "../assets/record5.webm";
-import video6 from "../assets/record6.webm";
+// import video6 from "../assets/record6.webm";
 import html from "../assets/html.png";
 import css from "../assets/css.png";
 import js from "../assets/javascript.png";
@@ -92,19 +94,31 @@ const projects = [
     github: "https://github.com/thesagargupta/music-player",
     website: "https://musicofile.netlify.app",
   },
-  {
-    title: "CALCULATOR",
+  // {
+  //   title: "CALCULATOR",
+  //   description:
+  //   "I have created this simple Calculator in which user can perform all types of arithmetic operation. it’s design exactly look like real Calculator.",
+  //   image: proj6,
+  //   video: video6,
+  //   technologies: [
+  //     { name: "HTML", icon: html },
+  //     { name: "CSS", icon: css },
+  //     { name: "JavaScript", icon: js },
+  //   ],
+  //   github: "https://github.com/thesagargupta/Calculator",
+  //   website: "https://guptajeekacalculator.netlify.app/",
+  // },
+    {
+    title: "BharatAi",
     description:
-    "I have created this simple Calculator in which user can perform all types of arithmetic operation. it’s design exactly look like real Calculator.",
-    image: proj6,
-    video: video6,
+      "BharatAI is an AI-powered web app built with Next.js that works like ChatGPT — it can chat intelligently, analyze images, and generate new images from text prompts.",
+    image: BharatAiLogo,
+    video: video1,
     technologies: [
-      { name: "HTML", icon: html },
-      { name: "CSS", icon: css },
-      { name: "JavaScript", icon: js },
+      { name: "Next.js", icon: nextjs },
     ],
-    github: "https://github.com/thesagargupta/Calculator",
-    website: "https://guptajeekacalculator.netlify.app/",
+    github: "https://github.com/thesagargupta/BharatAI",
+    website: "https://thebharatai.vercel.app",
   },
 ];
 
