@@ -3,6 +3,7 @@ import { FaGithub } from "react-icons/fa";
 import { BsGlobe } from "react-icons/bs";
 import nextjs from "../assets/Next.js.png";
 import proj1 from "../assets/cargame.png";
+import bharataivideo from "../assets/bharatai.webm";
 import proj2 from "../assets/portfolio.jpg";
 import proj3 from "../assets/virtual.jpg";
 import proj4 from "../assets/shoopers.png";
@@ -113,7 +114,7 @@ const projects = [
     description:
       "BharatAI is an AI-powered web app built with Next.js that works like ChatGPT — it can chat intelligently, analyze images, and generate new images from text prompts.",
     image: BharatAiLogo,
-    video: video1,
+    video: bharataivideo,
     technologies: [
       { name: "Next.js", icon: nextjs },
     ],
