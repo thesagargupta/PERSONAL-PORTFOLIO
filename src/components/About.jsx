@@ -8,7 +8,7 @@ import image5 from "../assets/express.png";
 import image7 from "../assets/css.png";
 import image8 from "../assets/python.png";
 import image9 from "../assets/c++.png";
-import image10 from "../assets/c.png";
+import image10 from "../assets/n8n.png";
 import image11 from "../assets/java.png";
 import image12 from "../assets/git.png";
 import image13 from "../assets/github.png";
@@ -22,6 +22,7 @@ import nextjsImg from "../assets/Next.js.png";
 import { useState, useEffect } from "react";
 import kartofferletter from "../assets/sagar experiene letter.pdf";
 import work1 from "../assets/kartbuddy.jpeg";
+import work2 from "../assets/kamyab.jpeg";
 // Education Data
 const education = [
   {
@@ -58,6 +59,17 @@ const experiences = [
       "Improved performance by optimizing database queries and reducing bundle size.",
     ],
   },  
+    {
+    company: "Kamyab Infotech PVT. LTD.",
+    role: "Full-Stack Developer and AI Automation Intern",
+    period: "Sep 2025 - Dec 2025",
+    image: work2,
+    bullets: [
+      "Developed and shipped full-stack web features using Next.js and MongoDB.",
+      "Created and managed multiple AI-driven automations using n8n, streamlining workflows and business processes.",
+      "Built VCF (vCard) converter automations for bulk contact processing and format transformations.",
+    ],
+  },  
 ];
 
 // Skills Data
@@ -71,7 +83,8 @@ const skills = [
   { name: "CSS3", image: image7 },
   { name: "Python", image: image8 },
   { name: "C++", image: image9 },
-  { name: "C", image: image10 },
+  // { name: "C", image: image10 },
+  { name: "n8n", image: image10 },
   { name: "Java", image: image11 },
   { name: "Git", image: image12 },
   { name: "Github", image: image13 },
