@@ -1,4 +1,6 @@
 import "./About.css";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import image1 from "../assets/javascript.png";
 import image2 from "../assets/pngwing.com (2).png";
 import image3 from "../assets/node.png";
@@ -58,8 +60,8 @@ const experiences = [
       "Implemented RESTful APIs with Node.js and Express for product modules.",
       "Improved performance by optimizing database queries and reducing bundle size.",
     ],
-  },  
-    {
+  },
+  {
     company: "Kamyab Infotech PVT. LTD.",
     role: "Full-Stack Developer and AI Automation Intern",
     period: "Sep 2025 - Dec 2025",
@@ -69,7 +71,19 @@ const experiences = [
       "Created and managed multiple AI-driven automations using n8n, streamlining workflows and business processes.",
       "Built VCF (vCard) converter automations for bulk contact processing and format transformations.",
     ],
-  },  
+  },
+  {
+    company: "Studycafe PVT. LTD.",
+    role: "Full-Stack Developer and AI Automation Engineer",
+    period: "Jan 2026 - Present",
+    image: "https://tasktracker24.com/studycafe_logo.jpg",
+    bullets: [
+      "Developed and maintained a full-stack Task Management SaaS application using Next.js, MongoDB, and Node.js.",
+      "Designed and implemented AI-powered workflow automations using n8n and Python, reducing manual operational effort.",
+      "Integrated Firebase Cloud Messaging (FCM) for real-time push notifications and task updates.",
+      "Built and optimized REST APIs, database schemas, and backend services for scalable web applications.",
+    ],
+  },
 ];
 
 // Skills Data
@@ -100,31 +114,41 @@ const About = () => {
   const [prefetched, setPrefetched] = useState({});
   const [modalOriginalSrc, setModalOriginalSrc] = useState(null);
 
+  // Animation refs
+  const skillsRef = useRef(null);
+  const educationRef = useRef(null);
+  const experienceRef = useRef(null);
+  const skillsInView = useInView(skillsRef, { once: true, margin: "-100px" });
+  const educationInView = useInView(educationRef, { once: true, margin: "-100px" });
+  const experienceInView = useInView(experienceRef, { once: true, margin: "-100px" });
+
   const openModal = (src) => {
-  // use prefetched blob URL when available
-  const srcToUse = prefetched[src] || src;
-  // If the original resource is a PDF and we're on a small/mobile screen, open in a new tab
-  try {
-    const isPdf = typeof src === "string" && src.toLowerCase().endsWith(".pdf");
-    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
-    if (isPdf && isMobile) {
-      // prefer original src (not blob) for opening in new tab so browser handles it
-      window.open(src, "_blank", "noopener,noreferrer");
-      return;
+    // use prefetched blob URL when available
+    const srcToUse = prefetched[src] || src;
+    // If the original resource is a PDF and we're on a small/mobile screen, open in a new tab
+    try {
+      const isPdf =
+        typeof src === "string" && src.toLowerCase().endsWith(".pdf");
+      const isMobile =
+        typeof window !== "undefined" && window.innerWidth <= 768;
+      if (isPdf && isMobile) {
+        // prefer original src (not blob) for opening in new tab so browser handles it
+        window.open(src, "_blank", "noopener,noreferrer");
+        return;
+      }
+    } catch {
+      // ignore and continue to modal
     }
-  } catch {
-    // ignore and continue to modal
-  }
-  setModalOriginalSrc(src);
-  setModalContent(srcToUse);
-  setModalOpen(true);
-  // if already prefetched, we can hide the loader immediately
-  if (prefetched[src]) {
-    // small delay to allow rendering kickoff
-    setTimeout(() => setModalLoading(false), 100);
-  } else {
-    setModalLoading(true);
-  }
+    setModalOriginalSrc(src);
+    setModalContent(srcToUse);
+    setModalOpen(true);
+    // if already prefetched, we can hide the loader immediately
+    if (prefetched[src]) {
+      // small delay to allow rendering kickoff
+      setTimeout(() => setModalLoading(false), 100);
+    } else {
+      setModalLoading(true);
+    }
   };
 
   // fallback: if loading remains for too long, clear spinner to avoid stuck state
@@ -141,7 +165,7 @@ const About = () => {
   const closeModal = () => {
     setModalOpen(false);
     setModalContent(null);
-  setModalLoading(false);
+    setModalLoading(false);
   };
 
   // Prevent background scrolling when modal is open; restore on close
@@ -217,12 +241,39 @@ const About = () => {
   return (
     <section id="about" className="about-section">
       <div className="about-container">
-        <h2 className="section-title">About Me</h2>
+        <motion.h2
+          className="section-title"
+          initial={{ opacity: 0, y: -50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, type: "spring" }}
+        >
+          About Me
+        </motion.h2>
         <div className="about-content">
-          <div className="about-card">
+          <motion.div
+            className="about-card"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <div className="about-content-flex">
-              <img src={gifImage} alt="Developer GIF" className="about-gif" />
-              <p>
+              <motion.img
+                src={gifImage}
+                alt="Developer GIF"
+                className="about-gif"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              />
+              <motion.p
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
                 I am a passionate Web and Software Developer with expertise in
                 the <strong>MERN stack</strong>, as well as software development
                 across a variety of technologies. I specialize in creating{" "}
@@ -233,44 +284,114 @@ const About = () => {
                 <strong>efficient</strong> and <strong>high-performance</strong>{" "}
                 applications, ensuring both functionality and seamless user
                 experience.
-              </p>
+              </motion.p>
             </div>
-            <p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
               My technical stack includes{" "}
               <strong>React.js, Node.js, Express.js,</strong> and
               <strong> MongoDB</strong>, along with{" "}
               <strong>JavaScript, Python, and C++</strong>. I am dedicated to{" "}
               <strong>problem-solving</strong> and{" "}
               <strong>continuous learning</strong>.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
           <hr className="section-divider" />
 
           {/* Skills Section */}
-          <div className="skills-section">
-            <h3 className="skills-title">Skills</h3>
+          <motion.div
+            ref={skillsRef}
+            className="skills-section"
+            initial={{ opacity: 0 }}
+            animate={skillsInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.h3
+              className="skills-title"
+              initial={{ opacity: 0, x: -50 }}
+              animate={skillsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+              transition={{ duration: 0.5 }}
+            >
+              Skills
+            </motion.h3>
             <div className="skills-container">
               {skills.map((skill, index) => (
-                <div key={index} className="skill-card">
+                <motion.div
+                  key={index}
+                  className="skill-card"
+                  initial={{ opacity: 0, scale: 0, rotateY: 180 }}
+                  animate={
+                    skillsInView
+                      ? { opacity: 1, scale: 1, rotateY: 0 }
+                      : { opacity: 0, scale: 0, rotateY: 180 }
+                  }
+                  transition={{
+                    duration: 0.5,
+                    delay: index * 0.05,
+                    type: "spring",
+                    stiffness: 200,
+                  }}
+                  whileHover={{
+                    scale: 1.1,
+                    rotate: 5,
+                    boxShadow: "0 20px 40px rgba(102, 126, 234, 0.3)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <img
                     src={skill.image}
                     alt={skill.name}
                     className="skill-icon"
                   />
                   <p>{skill.name}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           <hr className="section-divider" />
 
           {/* Education Section */}
-          <div className="education-section">
-            <h3 className="education-title">Education</h3>
+          <motion.div
+            ref={educationRef}
+            className="education-section"
+            initial={{ opacity: 0 }}
+            animate={educationInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.h3
+              className="education-title"
+              initial={{ opacity: 0, x: -50 }}
+              animate={educationInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+              transition={{ duration: 0.5 }}
+            >
+              Education
+            </motion.h3>
             <div className="education-container">
               {education.map((edu, index) => (
-                <div key={index} className="education-item">
+                <motion.div
+                  key={index}
+                  className="education-item"
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                  animate={
+                    educationInView
+                      ? { opacity: 1, x: 0 }
+                      : { opacity: 0, x: index % 2 === 0 ? -100 : 100 }
+                  }
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.2,
+                    type: "spring",
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0 20px 40px rgba(102, 126, 234, 0.2)",
+                  }}
+                >
                   <div className="education-icon">
                     <img src={edu.image} alt={edu.institute} />
                   </div>
@@ -282,75 +403,135 @@ const About = () => {
                     <span>{edu.year}</span>
                     <p>{edu.score}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
           <hr className="section-divider" />
 
           {/* Experience Section */}
-          <div className="experience-section">
-            <h3 className="experience-title">Experience</h3>
+          <motion.div
+            ref={experienceRef}
+            className="experience-section"
+            initial={{ opacity: 0 }}
+            animate={experienceInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.h3
+              className="experience-title"
+              initial={{ opacity: 0, x: -50 }}
+              animate={experienceInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+              transition={{ duration: 0.5 }}
+            >
+              Experience
+            </motion.h3>
             <div className="experience-container">
               {experiences.map((exp, idx) => (
-                <div key={idx} className="experience-item">
-                  <div className="experience-logo">
+                <motion.div
+                  key={idx}
+                  className="experience-item"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={
+                    experienceInView
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 50 }
+                  }
+                  transition={{
+                    duration: 0.6,
+                    delay: idx * 0.2,
+                    type: "spring",
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: "0 25px 50px rgba(102, 126, 234, 0.25)",
+                  }}
+                >
+                  <motion.div
+                    className="experience-logo"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
                     <img src={exp.image} alt={exp.company} />
-                  </div>
+                  </motion.div>
                   <div className="experience-details">
                     <h4>{exp.role}</h4>
                     <p className="experience-company">{exp.company}</p>
                     <ul className="experience-desc">
                       {exp.bullets.map((b, i) => (
-                        <li key={i}>{b}</li>
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={
+                            experienceInView
+                              ? { opacity: 1, x: 0 }
+                              : { opacity: 0, x: -20 }
+                          }
+                          transition={{ delay: idx * 0.2 + i * 0.1 }}
+                        >
+                          {b}
+                        </motion.li>
                       ))}
                     </ul>
                     {exp.offerLetter && (
                       <div className="offer-actions">
-                        <button
+                        <motion.button
                           className="offer-btn"
                           onClick={() => openModal(exp.offerLetter)}
+                          whileHover={{
+                            scale: 1.05,
+                            boxShadow: "0 10px 30px rgba(102, 126, 234, 0.4)",
+                          }}
+                          whileTap={{ scale: 0.95 }}
                         >
                           View Certificate
-                        </button>
+                        </motion.button>
                       </div>
                     )}
                   </div>
                   <div className="experience-period">
                     <span>{exp.period}</span>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
           {/* Modal for offer letters */}
           {modalOpen && (
             <div className="modal-overlay" onClick={closeModal}>
-                <div className="modal-body" onClick={(e) => e.stopPropagation()}>
-                  <div className="modal-scroll">
-                              {modalLoading && (
-                                <div className="modal-spinner" aria-hidden>
-                                  <div className="spinner" />
-                                </div>
-                              )}
-                              {modalContent && modalOriginalSrc && typeof modalOriginalSrc === "string" && modalOriginalSrc.toLowerCase().endsWith(".pdf") ? (
-                                <iframe
-                                  src={modalContent}
-                                  title="Offer Letter"
-                                  className="modal-iframe"
-                                  onLoad={() => setModalLoading(false)}
-                                />
-                              ) : (
-                                <img
-                                  src={modalContent}
-                                  alt="Offer Letter"
-                                  className="modal-image"
-                                  onLoad={() => setModalLoading(false)}
-                                />
-                              )}
-                  </div>
-                  <button className="modal-close" onClick={closeModal} aria-label="Close">Close</button>
+              <div className="modal-body" onClick={(e) => e.stopPropagation()}>
+                <div className="modal-scroll">
+                  {modalLoading && (
+                    <div className="modal-spinner" aria-hidden>
+                      <div className="spinner" />
+                    </div>
+                  )}
+                  {modalContent &&
+                  modalOriginalSrc &&
+                  typeof modalOriginalSrc === "string" &&
+                  modalOriginalSrc.toLowerCase().endsWith(".pdf") ? (
+                    <iframe
+                      src={modalContent}
+                      title="Offer Letter"
+                      className="modal-iframe"
+                      onLoad={() => setModalLoading(false)}
+                    />
+                  ) : (
+                    <img
+                      src={modalContent}
+                      alt="Offer Letter"
+                      className="modal-image"
+                      onLoad={() => setModalLoading(false)}
+                    />
+                  )}
                 </div>
+                <button
+                  className="modal-close"
+                  onClick={closeModal}
+                  aria-label="Close"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           )}
         </div>
